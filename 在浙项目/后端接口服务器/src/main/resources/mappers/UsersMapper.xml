@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxy.zjbg.mapper.UsersMapper">
+    <!--查询某用户的所有信息-->
+    <resultMap id="UserIdMap" type="com.cxy.zjbg.common.dto.UserDto">
+        <id column="u_id" property="uId"></id>
+        <result column="u_username" property="uUsername"></result>
+        <result column="u_email" property="uEmail"></result>
+        <result column="u_sex" property="uSex"></result>
+        <result column="u_age" property="uAge"></result>
+        <result column="u_telephone" property="uTelephone"></result>
+        <result column="u_role_id" property="uRoleId"></result>
+        <result column="r_name" property="rName"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+        <result column="status" property="status"></result>
+    </resultMap>
+    <select id="getUserById" resultMap="UserIdMap">
+        select u.u_id,
+               u.u_username,
+               u.u_email,
+               u.u_sex,
+               u.u_age,
+               u.u_telephone,
+               u.u_role_id,
+               r.r_name,
+               u.deleted,
+               u.gmt_create,
+               u.gmt_modified,
+               u.status
+        from t_users u
+        inner join t_roles r
+        where u.u_role_id=r.r_id and u_id=#{uId}
+    </select>
+
+    <!--修id用户的信息-->
+    <update id="updateUserById" parameterType="com.cxy.zjbg.common.dto.UserDto">
+        update t_users
+        <set>
+            <if test="uUsername != null">
+                u_username=#{uUsername},
+            </if>
+            <if test="uEmail != null">
+                u_email=#{uEmail},
+            </if>
+            <if test="uSex != null">
+                u_sex=#{uSex},
+            </if>
+            <if test="uAge != null">
+                u_age=#{uAge},
+            </if>
+            <if test="uRoleId != null">
+                u_role_id=#{uRoleId},
+            </if>
+            <if test="uTelephone != null">
+                u_telephone=#{uTelephone},
+            </if>
+            <if test="deleted != null">
+                deleted=#{deleted},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified=#{gmtModified},
+            </if>
+            <if test="status != null">
+                status=#{status}
+            </if>
+        </set>
+        where u_id= #{uId}
+    </update>
+    <!--查询所有用户信息-->
+    <resultMap id="listAllUser_Map" type="com.cxy.zjbg.common.dto.UserDto">
+        <id column="u_id" property="uId"></id>
+        <result column="u_username" property="uUsername"></result>
+        <result column="u_email" property="uEmail"></result>
+        <result column="u_sex" property="uSex"></result>
+        <result column="u_age" property="uAge"></result>
+        <result column="u_telephone" property="uTelephone"></result>
+        <result column="u_role_id" property="uRoleId"></result>
+        <result column="r_name" property="rName"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+        <result column="status" property="status"></result>
+    </resultMap>
+    <select id="listAllUser" resultMap="listAllUser_Map">
+        select u.u_id,
+               u.u_username,
+               u.u_email,
+               u.u_sex,
+               u.u_age,
+               u.u_telephone,
+               u.u_role_id,
+               r.r_name,
+               u.deleted,
+               u.gmt_create,
+               u.gmt_modified,
+               u.status
+        from t_users u inner join t_roles r
+        where u.u_role_id=r.r_id and u.deleted=0
+    </select>
+    <select id="listAllUserDeleted" resultMap="listAllUser_Map">
+        select u.u_id,
+               u.u_username,
+               u.u_email,
+               u.u_sex,
+               u.u_age,
+               u.u_telephone,
+               u.u_role_id,
+               r.r_name,
+               u.deleted,
+               u.gmt_create,
+               u.gmt_modified,
+               u.status
+        from t_users u inner join t_roles r
+        where u.u_role_id=r.r_id and u.deleted = 1
+    </select>
+    <select id="listAllUserWithSearch" resultMap="listAllUser_Map">
+        select u.u_id,
+               u.u_username,
+               u.u_email,
+               u.u_sex,
+               u.u_age,
+               u.u_telephone,
+               u.u_role_id,
+               r.r_name,
+               u.deleted,
+               u.gmt_create,
+               u.gmt_modified,
+               u.status
+        from t_users u inner join t_roles r
+        where u.u_role_id=r.r_id and u.u_username like concat('%',#{name},'%') and u.deleted=0
+    </select>
+    <select id="listAllUserWithSearchDeleted" resultMap="listAllUser_Map">
+        select u.u_id,
+               u.u_username,
+               u.u_email,
+               u.u_sex,
+               u.u_age,
+               u.u_telephone,
+               u.u_role_id,
+               r.r_name,
+               u.deleted,
+               u.gmt_create,
+               u.gmt_modified,
+               u.status
+        from t_users u inner join t_roles r
+        where u.u_role_id=r.r_id and u.u_username like concat('%',#{name},'%') and u.deleted=1
+    </select>
+
+    <update id="recoverUser" >
+        update t_users set deleted=0 where u_id=#{uId}
+    </update>
+
+    <delete id="clearUserById">
+        delete from t_users where u_id=#{uId}
+    </delete>
+</mapper>

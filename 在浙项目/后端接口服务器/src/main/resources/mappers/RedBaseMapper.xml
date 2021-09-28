@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxy.zjbg.mapper.RedBaseMapper">
+    <resultMap id="select" type="com.cxy.zjbg.entity.RedBase">
+        <id column="r_id" property="rId"></id>
+        <result column="r_name" property="rName"></result>
+        <result column="r_synopsis" property="rSynopsis"></result>
+        <result column="r_detail" property="rDetail"></result>
+        <result column="r_city_id" property="rCityId"></result>
+        <result column="c_name" property="cName"></result>
+        <result column="r_img" property="rImg"></result>
+        <result column="r_achievement" property="rAchievement"></result>
+        <result column="r_address" property="rAddress"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+    </resultMap>
+    <select id="listAllRedBaseWithSearch" resultMap="select">
+        select r.r_id,r.r_name,r.r_img,r.r_synopsis,r.r_detail,r.r_city_id,c.c_name,r.gmt_create,r.gmt_modified
+        from t_red_base as r,t_city as c
+        where r.r_city_id=c.c_id and r.r_name like concat('%',#{name},'%')
+    </select>
+    <select id="listAllRedBase" resultMap="select">
+        select r.r_id,r.r_name,r.r_img,r.r_synopsis,r.r_detail,r.r_city_id,c.c_name,r.gmt_create,r.gmt_modified
+        from t_red_base as r,t_city as c
+        where r.r_city_id=c.c_id
+    </select>
+</mapper>

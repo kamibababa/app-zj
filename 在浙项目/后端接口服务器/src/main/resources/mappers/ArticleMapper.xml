@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxy.zjbg.mapper.ArticleMapper">
+
+    <resultMap id="listArticle_Map" type="com.cxy.zjbg.common.dto.ArticleDto">
+        <id column="a_id" property="aId"></id>
+        <result column="a_title" property="aTitle"></result>
+        <result column="a_city_id" property="aCityId"></result>
+        <result column="c_name" property="cName"></result>
+        <result column="a_cover_img" property="aCoverImg"></result>
+        <result column="a_author" property="aAuthor"></result>
+        <result column="a_content" property="aContent"></result>
+        <result column="a_status" property="aStatus"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+    </resultMap>
+    <select id="listArticle" resultMap="listArticle_Map">
+        select a.a_id,a.a_title,a.a_city_id,c.c_name,a.a_cover_img,a.a_author,a.a_content,a.a_status,a.deleted,a.gmt_create,a.gmt_modified
+        from t_article as a,t_city as c
+        where a.a_city_id = c.c_id
+    </select>
+
+    <select id="listAllArticle" resultMap="listArticle_Map">
+        select a.a_id,a.a_title,a.a_city_id,c.c_name,a.a_cover_img,a.a_author,a.a_content,a.a_status,a.deleted,a.gmt_create,a.gmt_modified
+        from t_article as a,t_city as c
+        where a.a_city_id = c.c_id and a.deleted=0
+    </select>
+
+    <select id="listAllArticleWithSearch" resultMap="listArticle_Map">
+        select a.a_id,a.a_title,a.a_city_id,c.c_name,a.a_cover_img,a.a_author,a.a_content,a.a_status,a.deleted,a.gmt_create,a.gmt_modified
+        from t_article as a,t_city as c
+        where a.a_city_id = c.c_id and a.a_title like concat('%',#{name},'%') and a.deleted=0
+    </select>
+
+    <select id="listAllArticleDeleted" resultMap="listArticle_Map">
+        select a.a_id,a.a_title,a.a_city_id,c.c_name,a.a_cover_img,a.a_author,a.a_content,a.a_status,a.deleted,a.gmt_create,a.gmt_modified
+        from t_article as a,t_city as c
+        where a.a_city_id = c.c_id and a.deleted=1
+    </select>
+
+    <select id="listAllArticleWithSearchDeleted" resultMap="listArticle_Map">
+        select a.a_id,a.a_title,a.a_city_id,c.c_name,a.a_cover_img,a.a_author,a.a_content,a.a_status,a.deleted,a.gmt_create,a.gmt_modified
+        from t_article as a,t_city as c
+        where a.a_city_id = c.c_id and a.a_title like concat('%',#{name},'%') and a.deleted=1
+    </select>
+
+    <delete id="clearArticleById">
+        delete from t_article where a_id=#{aId}
+    </delete>
+
+</mapper>

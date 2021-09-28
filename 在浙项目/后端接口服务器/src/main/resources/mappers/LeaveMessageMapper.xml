@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxy.zjbg.mapper.LeaveMessageMapper">
+
+    <resultMap id="listAllMessageById_Map" type="com.cxy.zjbg.entity.LeaveMessage">
+        <id column="m_id" property="mId"></id>
+        <result column="m_content" property="mContent"></result>
+        <result column="m_user_id" property="mUserId"></result>
+        <result column="u_username" property="uName"></result>
+        <result column="m_content" property="mContent"></result>
+        <result column="m_article_id" property="mArticleId"></result>
+        <result column="a_title" property="aTitle"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+    </resultMap>
+    <select id="listAllMessageById" resultMap="listAllMessageById_Map">
+        select l.m_id,l.m_content,l.m_user_id,u.u_username,a.a_title,l.deleted,l.gmt_create,l.gmt_modified
+        from t_leave_message as l,t_users as u,t_article as a
+        where l.m_user_id = u_id and l.m_article_id=#{aId} and a.a_id=l.m_article_id
+    </select>
+
+    <resultMap id="getAllMessageByUserId_Map" type="com.cxy.zjbg.entity.LeaveMessage">
+        <id column="m_id" property="mId"></id>
+        <result column="m_content" property="mContent"></result>
+        <result column="m_user_id" property="mUserId"></result>
+        <result column="u_username" property="uName"></result>
+        <result column="m_content" property="mContent"></result>
+        <result column="m_article_id" property="mArticleId"></result>
+        <result column="a_title" property="aTitle"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+    </resultMap>
+    <select id="getAllMessageByUserId" resultMap="getAllMessageByUserId_Map">
+        select l.m_id,l.m_content,l.m_user_id,u.u_username,a.a_title,l.deleted,l.gmt_create,l.gmt_modified
+        from t_leave_message as l,t_users as u,t_article as a
+        where m_user_id = u_id and m_article_id=#{aId} and m_user_id=#{uId} and a.a_id=l.m_article_id
+    </select>
+
+    <resultMap id="getMessageByUserId_Map" type="com.cxy.zjbg.entity.LeaveMessage">
+        <id column="m_id" property="mId"></id>
+        <result column="m_content" property="mContent"></result>
+        <result column="m_user_id" property="mUserId"></result>
+        <result column="u_username" property="uName"></result>
+        <result column="m_content" property="mContent"></result>
+        <result column="m_article_id" property="mArticleId"></result>
+        <result column="a_title" property="aTitle"></result>
+        <result column="deleted" property="deleted"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+    </resultMap>
+    <select id="getMessageByUserId" resultMap="getMessageByUserId_Map">
+        select l.m_id,l.m_content,l.m_user_id,u.u_username,a.a_title,l.deleted,l.gmt_create,l.gmt_modified
+        from t_leave_message as l,t_users as u,t_article as a
+        where m_user_id = u_id and m_user_id=#{uId} and a.a_id=l.m_article_id
+    </select>
+    <select id="listAllMessage" resultMap="getMessageByUserId_Map">
+        select l.m_id,l.m_content,l.m_user_id,u.u_username,a.a_title,l.deleted,l.gmt_create,l.gmt_modified
+        from t_leave_message as l,t_users as u,t_article as a
+        where m_user_id = u_id and a.a_id=l.m_article_id and l.deleted=0
+    </select>
+    <select id="listAllMessageWithSearch" resultMap="getMessageByUserId_Map">
+        select l.m_id,l.m_content,l.m_user_id,u.u_username,a.a_title,l.deleted,l.gmt_create,l.gmt_modified
+        from t_leave_message as l,t_users as u,t_article as a
+        where m_user_id = u_id and a.a_id=l.m_article_id and l.deleted=0 and l.m_content like concat('%',#{name},'%')
+    </select>
+</mapper>

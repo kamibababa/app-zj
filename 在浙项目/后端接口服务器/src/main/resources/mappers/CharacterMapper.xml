@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxy.zjbg.mapper.CharacterMapper">
+
+    <resultMap id="listCharacters_Map" type="com.cxy.zjbg.common.dto.CharacterDto">
+        <id column="c_id" property="cId"></id>
+        <result column="ch_name" property="chName"></result>
+        <result column="c_city_id" property="cCityId"></result>
+        <result column="c_deeds_synopsis" property="cDeedsSynopsis"></result>
+        <result column="c_deeds_detail" property="cDeedsDetail"></result>
+        <result column="c_img" property="cImg"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+        <result column="c_name" property="cName"></result>
+    </resultMap>
+    <select id="listCharacters" resultMap="listCharacters_Map">
+        select ct.c_id,ct.ch_name,ct.c_city_id,ct.c_deeds_synopsis,ct.c_deeds_detail,ct.c_img,ct.gmt_create,ct.gmt_modified,c.c_name
+        from t_city as c,t_character as ct
+        where ct.c_city_id=c.c_id
+    </select>
+
+    <resultMap id="getCharacterById_Map" type="com.cxy.zjbg.common.dto.CharacterDto">
+        <id column="c_id" property="cId"></id>
+        <result column="ch_name" property="chName"></result>
+        <result column="c_city_id" property="cCityId"></result>
+        <result column="c_deeds_synopsis" property="cDeedsSynopsis"></result>
+        <result column="c_deeds_detail" property="cDeedsDetail"></result>
+        <result column="c_img" property="cImg"></result>
+        <result column="gmt_create" property="gmtCreate"></result>
+        <result column="gmt_modified" property="gmtModified"></result>
+        <result column="c_name" property="cName"></result>
+    </resultMap>
+    <select id="getCharacterById" resultMap="getCharacterById_Map">
+        select ct.c_id,ct.ch_name,ct.c_city_id,ct.c_deeds_synopsis,ct.c_deeds_detail,ct.c_img,ct.gmt_create,ct.gmt_modified,c.c_name
+        from t_city as c,t_character as ct
+        where ct.c_city_id=c.c_id and ct.c_id=#{cId}
+    </select>
+    <select id="listAllCharacterWithSearch" resultMap="listCharacters_Map">
+        select ct.c_id,ct.ch_name,ct.c_city_id,ct.c_deeds_synopsis,ct.c_deeds_detail,ct.c_img,ct.gmt_create,ct.gmt_modified,c.c_name
+        from t_city as c,t_character as ct
+        where ct.c_city_id=c.c_id and ct.ch_name like concat('%',#{name},'%')
+    </select>
+
+    <select id="listAllCharacterByCity" resultMap="getCharacterById_Map">
+        select ct.c_id,ct.ch_name,ct.c_city_id,ct.c_deeds_synopsis,ct.c_deeds_detail,ct.c_img,ct.gmt_create,ct.gmt_modified,c.c_name
+        from t_city as c,t_character as ct
+        where ct.c_city_id=c.c_id and ct.c_city_id=#{cCityId}
+    </select>
+    <select id="listAllCharacter" resultMap="listCharacters_Map">
+        select ct.c_id,ct.ch_name,ct.c_city_id,ct.c_deeds_synopsis,ct.c_deeds_detail,ct.c_img,ct.gmt_create,ct.gmt_modified,c.c_name
+        from t_city as c,t_character as ct
+        where ct.c_city_id=c.c_id
+    </select>
+    <update id="updateCharacter" >
+        update t_character
+        <set>
+            <if test="cCityId  != null">c_city_id=#{cCityId},</if>
+            <if test="chName  != null">ch_name=#{chName},</if>
+            <if test="cDeedsSynopsis  != null">c_deeds_synopsis=#{cDeedsSynopsis},</if>
+            <if test="cDeedsDetail  != null">c_deeds_detail=#{cDeedsDetail},</if>
+            <if test="cImg  != null">c_img=#{cImg}</if>
+        </set>
+        where c_id=#{cId}
+    </update>
+    <insert id="saveCharacter" >
+        insert into t_character(c_city_id,ch_name,c_deeds_synopsis,c_deeds_detail,c_img,gmt_create,gmt_modified)
+        values(#{cCityId},#{chName},#{cDeedsSynopsis},#{cDeedsDetail},#{cImg},#{gmtCreate},#{gmtModified})
+    </insert>
+</mapper>
